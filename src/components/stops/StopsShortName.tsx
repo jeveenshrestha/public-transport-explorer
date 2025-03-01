@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './style.module.css';
+import styles from './stops.module.css';
 import { Mode } from '../../types/vehicleMode';
 import { colors } from '../../utils/modeIcons';
 

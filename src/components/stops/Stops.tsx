@@ -1,10 +1,12 @@
 import React from 'react';
 import { Card, Col, ListGroup, Row } from 'react-bootstrap';
+
 import { Stop, StopTimesWithoutPatterns } from '../../types/station';
-import styles from './stops.module.css';
-import StopsShortName from '../stopsShortName/StopsShortName';
-import { getTime } from '../../utils/helper';
 import { modeIcons } from '../../utils/modeIcons';
+import StopsShortName from './StopsShortName';
+import { getTime } from '../../utils/helper';
+
+import styles from './stops.module.css';
 
 const Stops: React.FC<{
   stop: Stop;
