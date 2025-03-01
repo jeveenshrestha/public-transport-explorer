@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Card, Col, ListGroup, Row } from 'react-bootstrap';
 
 import { Stop, StopTimesWithoutPatterns } from '../../types/station';
@@ -11,6 +11,31 @@ import styles from './stops.module.css';
 const Stops: React.FC<{
   stop: Stop;
 }> = ({ stop }) => {
+  const stopTimesList = useMemo(
+    () =>
+      stop.stoptimesWithoutPatterns.map(
+        (pattern: StopTimesWithoutPatterns, index: number) => (
+          <ListGroup.Item key={index}>
+            <Row>
+              <Col md={2}>
+                <StopsShortName
+                  mode={pattern.trip.route.mode}
+                  name={pattern.trip.route.shortName}
+                />
+              </Col>
+              <Col className={styles.stops} md={5}>
+                {pattern.headsign}
+              </Col>
+              <Col md={2}>
+                {getTime(pattern.serviceDay, pattern.scheduledDeparture)}
+              </Col>
+              <Col md={3}>{pattern.stop.platformCode || 'N/A'}</Col>
+            </Row>
+          </ListGroup.Item>
+        )
+      ),
+    [stop.stoptimesWithoutPatterns]
+  );
   return (
     <Row className="mt-4">
       <Col>
@@ -45,30 +70,7 @@ const Stops: React.FC<{
                   </Col>
                 </Row>
               </ListGroup.Item>
-              {stop.stoptimesWithoutPatterns.map(
-                (pattern: StopTimesWithoutPatterns, index: number) => (
-                  <ListGroup.Item key={index}>
-                    <Row>
-                      <Col md={2}>
-                        <StopsShortName
-                          mode={pattern.trip.route.mode}
-                          name={pattern.trip.route.shortName}
-                        />
-                      </Col>
-                      <Col className={styles.stops} md={5}>
-                        {pattern.headsign}
-                      </Col>
-                      <Col md={2}>
-                        {getTime(
-                          pattern.serviceDay,
-                          pattern.scheduledDeparture
-                        )}
-                      </Col>
-                      <Col md={3}>{pattern.stop.platformCode}</Col>
-                    </Row>
-                  </ListGroup.Item>
-                )
-              )}
+              {stopTimesList}
             </ListGroup>
           </Card.Body>
         </Card>

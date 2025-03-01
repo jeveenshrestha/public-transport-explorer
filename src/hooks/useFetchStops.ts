@@ -1,31 +1,5 @@
-import { gql, useLazyQuery } from '@apollo/client';
-
-const GET_STOPS_IN_STATION = gql`
-  query GetStopsInStation($stationId: String!) {
-    station(id: $stationId) {
-      gtfsId
-      name
-      vehicleMode
-      stoptimesWithoutPatterns(numberOfDepartures: 50) {
-        stop {
-          platformCode
-        }
-        serviceDay
-        scheduledArrival
-        scheduledDeparture
-        trip {
-          route {
-            gtfsId
-            shortName
-            longName
-            mode
-          }
-        }
-        headsign
-      }
-    }
-  }
-`;
+import { useLazyQuery } from '@apollo/client';
+import { GET_STOPS_IN_STATION } from '../graphql/queries';
 
 export const useFetchStops = () => {
   const [fetchStops, { data: stopsData, startPolling, stopPolling }] =

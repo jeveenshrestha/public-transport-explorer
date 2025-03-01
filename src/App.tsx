@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Col, Container, Row, Spinner } from 'react-bootstrap';
 
 import './App.css';
@@ -14,10 +14,12 @@ import { useFetchStations } from './hooks/useFetchStations';
 import { useFetchStops } from './hooks/useFetchStops';
 
 const DEFAULT_LOCATION = { lat: 60.1695, lon: 24.9354 }; // Helsinki city center
+const DEFAULT_RADIUS = 500;
 
 const App: React.FC = () => {
   const {
     stationData,
+    setStationData,
     selectedModes,
     loadingStation,
     fetchStationsByLocation,
@@ -31,37 +33,47 @@ const App: React.FC = () => {
   const [selectedStation, setSelectedStation] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    setSelectedStation(null);
-    stopPolling();
-    fetchStations({ variables: { query } });
-  };
+  const handleSearch = useCallback(
+    (query: string) => {
+      setSearchQuery(query);
+      setSelectedStation(null);
+      stopPolling();
+      setStationData([]); // Clear old stations
+      fetchStations({ variables: { query } });
+    },
+    [fetchStations, stopPolling, setStationData]
+  );
 
-  const handleSelectStation = (query: string) => {
-    setSearchQuery(query);
-    stopPolling();
-    fetchStations({ variables: { query } });
-  };
+  // Handle station click on the map
+  const handleStationClick = useCallback(
+    (stationId: string) => {
+      setSelectedStation(stationId);
+      fetchStops({ variables: { stationId } });
+      startPolling(2000);
+    },
+    [fetchStops, startPolling]
+  );
 
-  const handleStationClick = (stationId: string) => {
-    setSelectedStation(stationId);
-    fetchStops({ variables: { stationId } });
-    startPolling(2000);
-  };
+  // Handle filter selection
+  const handleFilterChange = useCallback(
+    (modes: Mode[]) => {
+      setSelectedModes(modes);
+    },
+    [setSelectedModes]
+  );
 
-  const handleFilterChange = (modes: Mode[]) => {
-    setSelectedModes(modes);
-  };
-
-  const handleClearInputField = () => {
+  // Handle clearing the search input
+  const handleClearInputField = useCallback(() => {
     setSelectedModes([]);
     setSearchQuery('');
     setSelectedStation(null);
     stopPolling();
-    fetchStationsByLocation({ variables: { ...userLocation, radius: 500 } });
-  };
+    fetchStationsByLocation({
+      variables: { ...userLocation, radius: DEFAULT_RADIUS },
+    });
+  }, [fetchStationsByLocation, stopPolling, userLocation, setSelectedModes]);
 
+  // Fetch user location when the app loads
   useEffect(() => {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -74,19 +86,18 @@ const App: React.FC = () => {
           fetchStationsByLocation({
             variables: {
               ...newLocation,
-              radius: 500,
+              radius: DEFAULT_RADIUS,
             },
           });
         },
-        () => {
+        () =>
           fetchStationsByLocation({
-            variables: { ...DEFAULT_LOCATION, radius: 500 },
-          }); // using default location
-        }
+            variables: { ...DEFAULT_LOCATION, radius: DEFAULT_RADIUS },
+          }) // using default location
       );
     } else {
       fetchStationsByLocation({
-        variables: { ...DEFAULT_LOCATION, radius: 500 },
+        variables: { ...DEFAULT_LOCATION, radius: DEFAULT_RADIUS },
       });
     }
   }, [fetchStationsByLocation]);
@@ -95,11 +106,14 @@ const App: React.FC = () => {
     setSelectedStation(null);
   }, [searchQuery]);
 
-  const filteredStations =
-    stationData?.filter(
-      (station: Station) =>
-        selectedModes && selectedModes.includes(station.vehicleMode)
-    ) || [];
+  const filteredStations = useMemo(
+    () =>
+      stationData?.filter(
+        (station: Station) =>
+          selectedModes && selectedModes.includes(station.vehicleMode)
+      ) || [],
+    [stationData, selectedModes]
+  );
 
   return (
     <Container className="mt-4">
@@ -108,7 +122,7 @@ const App: React.FC = () => {
         <Col>
           <Search
             onSearch={handleSearch}
-            onSelect={handleSelectStation}
+            onSelect={handleSearch}
             onClear={handleClearInputField}
           />
         </Col>

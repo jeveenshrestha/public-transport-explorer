@@ -2,7 +2,7 @@
   text-align: left;
 }
 .badge {
-  display: block;
+  display: inline-block;
   box-sizing: border-box;
   max-width: 40%;
   border-radius: 4px;

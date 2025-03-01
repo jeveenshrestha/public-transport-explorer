@@ -1,56 +1,51 @@
-import { gql, useLazyQuery } from '@apollo/client';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Form, InputGroup, ListGroup } from 'react-bootstrap';
 import { modeIcons } from '../utils/modeIcons';
 import { Station } from '../types/station';
-
-const SEARCH_STATIONS = gql`
-  query SearchStations($query: String!) {
-    stations(name: $query) {
-      id
-      name
-      vehicleMode
-    }
-  }
-`;
+import { useFetchStations } from '../hooks/useFetchStations';
 
 const Search: React.FC<{
   onSearch: (query: string) => void;
   onSelect: (stationId: string) => void;
   onClear: () => void;
 }> = ({ onSearch, onSelect, onClear }) => {
-  const [stationsData, setStationsData] = useState<Station[]>([]);
+  const { fetchStations, stationData } = useFetchStations();
   const [search, setSearch] = useState('');
-  const [fetchStations] = useLazyQuery(SEARCH_STATIONS, {
-    onCompleted: (data) => {
-      setStationsData(
-        data.stations.filter((station: Station) => station.vehicleMode !== null)
-      );
-    },
-  });
   const [showSuggestion, setShowSuggestion] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
-    setSearch(query);
-    if (query.length > 1) {
-      fetchStations({ variables: { query } });
-    }
-    setShowSuggestion(true);
-  };
+  // Debounce API calls to avoid unnecessary queries
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (search.length > 1) fetchStations({ variables: { query: search } });
+    }, 300); // Wait for 300ms before triggering API call
+    return () => clearTimeout(handler);
+  }, [search, fetchStations]);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      onSearch(search);
-      setShowSuggestion(false);
-    }
-  };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearch((prevSearch) =>
+        e.target.value !== prevSearch ? e.target.value : prevSearch
+      );
+      setShowSuggestion(true);
+    },
+    []
+  );
 
-  const handleClearSearch = () => {
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLElement>) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        onSearch(search);
+        setShowSuggestion(false);
+      }
+    },
+    [search, onSearch]
+  );
+
+  const handleClearSearch = useCallback(() => {
     setSearch('');
     onClear();
-  };
+  }, [onClear]);
 
   return (
     <>
@@ -78,9 +73,9 @@ const Search: React.FC<{
         </Button>
       </InputGroup>
 
-      {stationsData.length > 0 && showSuggestion && (
+      {stationData.length > 0 && showSuggestion && (
         <ListGroup>
-          {stationsData.map((station: Station) => (
+          {stationData.map((station: Station) => (
             <ListGroup.Item
               key={station.gtfsId}
               action

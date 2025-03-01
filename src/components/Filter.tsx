@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { Mode } from '../types/vehicleMode';
 import { modeIcons } from '../utils/modeIcons';
@@ -15,22 +15,24 @@ const Filter: React.FC<{
     'FERRY',
   ]);
 
-  const toggleMode = (mode: Mode) => {
-    const updatedModes = selectedModes.includes(mode)
-      ? selectedModes.filter((m) => m !== mode)
-      : [...selectedModes, mode];
-    setSelectedModes(updatedModes);
-    onFilterChange(updatedModes);
-  };
+  // Optimize mode toggling with useCallback
+  const toggleMode = useCallback(
+    (mode: Mode) => {
+      setSelectedModes((prevModes) => {
+        const updatedModes = prevModes.includes(mode)
+          ? prevModes.filter((m) => m !== mode)
+          : [...prevModes, mode];
+        onFilterChange(updatedModes);
+        return updatedModes;
+      });
+    },
+    [onFilterChange]
+  );
 
-  useEffect(() => {
-    if (modes.length === 0) return;
-    setSelectedModes(modes);
-  }, [modes]);
-
-  return (
-    <div className="d-flex flex-column justify-content-center gap-3">
-      {Object.keys(modeIcons).map((mode) => (
+  // Use useMemo to prevent unnecessary re-renders
+  const renderedIcons = useMemo(
+    () =>
+      Object.keys(modeIcons).map((mode) => (
         <Row key={mode}>
           <Col md={12}>
             <img
@@ -47,7 +49,18 @@ const Filter: React.FC<{
             />
           </Col>
         </Row>
-      ))}
+      )),
+    [selectedModes, toggleMode]
+  );
+
+  useEffect(() => {
+    if (modes.length === 0) return;
+    setSelectedModes(modes);
+  }, [modes]);
+
+  return (
+    <div className="d-flex flex-column justify-content-center gap-3">
+      {renderedIcons}
     </div>
   );
 };

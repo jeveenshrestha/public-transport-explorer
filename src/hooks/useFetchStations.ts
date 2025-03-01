@@ -1,44 +1,8 @@
-import { gql, useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { NearestStation, Station } from '../types/station';
 import { Mode } from '../types/vehicleMode';
 import { useState } from 'react';
-
-const GET_STATIONS_BY_LOCATION = gql`
-  query GetNearestStations($lat: Float!, $lon: Float!, $radius: Int!) {
-    nearest(
-      lat: $lat
-      lon: $lon
-      maxDistance: $radius
-      filterByPlaceTypes: [STATION]
-    ) {
-      edges {
-        node {
-          place {
-            ... on Stop {
-              gtfsId
-              name
-              lat
-              lon
-              vehicleMode
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
-const GET_STATIONS = gql`
-  query GetStations($query: String!) {
-    stations(name: $query) {
-      gtfsId
-      name
-      lat
-      lon
-      vehicleMode
-    }
-  }
-`;
+import { GET_STATIONS, GET_STATIONS_BY_LOCATION } from '../graphql/queries';
 
 export const useFetchStations = () => {
   const [stationData, setStationData] = useState<Station[]>([]);
@@ -71,7 +35,6 @@ export const useFetchStations = () => {
           data?.stations.filter(
             (station: Station) => station.vehicleMode !== null
           ) || [];
-        setStationData(stations);
         const modes = Array.from(
           new Set(data?.stations.map((station: Station) => station.vehicleMode))
         ) as Mode[];
@@ -84,6 +47,7 @@ export const useFetchStations = () => {
 
   return {
     stationData,
+    setStationData,
     selectedModes,
     loadingStation,
     fetchStationsByLocation,
