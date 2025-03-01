@@ -1,0 +1,14 @@
+.badge {
+  display: block;
+  box-sizing: border-box;
+  max-width: 40%;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+  text-align: center;
+}
+
+h6 {
+  font-size: 16px;
+  font-weight: 200;
+}

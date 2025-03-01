@@ -1,0 +1,1 @@
+export type Mode = 'BUS' | 'TRAM' | 'SUBWAY' | 'RAIL' | 'FERRY';
