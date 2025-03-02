@@ -19,9 +19,9 @@ export interface MarkerProps {
 // Define custom icons for each mode
 
 export const modeIcons: Record<string, L.Icon> = {
-  BUS: L.icon({ iconUrl: busIcon, iconSize: [32, 32] }),
-  TRAM: L.icon({ iconUrl: tramIcon, iconSize: [32, 32] }),
-  SUBWAY: L.icon({ iconUrl: metroIcon, iconSize: [32, 32] }),
-  RAIL: L.icon({ iconUrl: trainIcon, iconSize: [32, 32] }),
-  FERRY: L.icon({ iconUrl: ferryIcon, iconSize: [32, 32] }),
+  BUS: L.icon({ iconUrl: busIcon, iconSize: [18, 18] }),
+  TRAM: L.icon({ iconUrl: tramIcon, iconSize: [18, 18] }),
+  SUBWAY: L.icon({ iconUrl: metroIcon, iconSize: [18, 18] }),
+  RAIL: L.icon({ iconUrl: trainIcon, iconSize: [18, 18] }),
+  FERRY: L.icon({ iconUrl: ferryIcon, iconSize: [18, 18] }),
 };

@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapProps, modeIcons } from '../types/map';
-import { Station } from '../types/station';
+import { MapProps, modeIcons } from '../../types/map';
+import { Station } from '../../types/station';
 
 const DEFAULT_CENTER: [number, number] = [60.1695, 24.9354]; // fallback
-const DEFAULT_ZOOM = 15;
+const DEFAULT_ZOOM = 16;
 
 // Helper component to recenter the map
 const RecenterMap: React.FC<{ stations: MapProps['stations'] }> = ({

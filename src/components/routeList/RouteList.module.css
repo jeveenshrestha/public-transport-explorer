@@ -1,0 +1,15 @@
+.routesList {
+  width: 100%;
+  overflow-x: auto;
+  padding: 16px 2px;
+}
+
+.badge {
+  display: inline-block;
+  box-sizing: border-box;
+  border: 1px solid grey;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+  text-align: center;
+}

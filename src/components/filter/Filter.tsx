@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { Mode } from '../types/vehicleMode';
-import { modeIcons } from '../utils/modeIcons';
+import { Mode } from '../../types/vehicleMode';
+import { modeIcons } from '../../utils/modeIcons';
 
 const Filter: React.FC<{
   onFilterChange: (modes: Mode[]) => void;
@@ -18,15 +18,13 @@ const Filter: React.FC<{
   // Optimize mode toggling with useCallback
   const toggleMode = useCallback(
     (mode: Mode) => {
-      setSelectedModes((prevModes) => {
-        const updatedModes = prevModes.includes(mode)
-          ? prevModes.filter((m) => m !== mode)
-          : [...prevModes, mode];
-        onFilterChange(updatedModes);
-        return updatedModes;
-      });
+      const updatedModes = selectedModes.includes(mode)
+        ? selectedModes.filter((m) => m !== mode)
+        : [...selectedModes, mode];
+      setSelectedModes(updatedModes);
+      onFilterChange(updatedModes);
     },
-    [onFilterChange]
+    [onFilterChange, selectedModes]
   );
 
   // Use useMemo to prevent unnecessary re-renders

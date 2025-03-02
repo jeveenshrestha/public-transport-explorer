@@ -1,17 +1,18 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Col, Container, Row, Spinner } from 'react-bootstrap';
+import { Container, Spinner } from 'react-bootstrap';
 
 import './App.css';
 
 import Stops from './components/stops/Stops';
-import Filter from './components/Filter';
+import Filter from './components/filter/Filter';
 import Search from './components/Search';
-import Map from './components/Map';
+import Map from './components/map/Map';
 
 import { Station } from './types/station';
 import { Mode } from './types/vehicleMode';
 import { useFetchStations } from './hooks/useFetchStations';
 import { useFetchStops } from './hooks/useFetchStops';
+import styles from './styles/App.module.css';
 
 const DEFAULT_LOCATION = { lat: 60.1695, lon: 24.9354 }; // Helsinki city center
 const DEFAULT_RADIUS = 500;
@@ -118,20 +119,18 @@ const App: React.FC = () => {
   return (
     <Container className="mt-4">
       <h3 className="text-center mb-4">HSL Public Transport Explorer</h3>
-      <Row>
-        <Col>
-          <Search
-            onSearch={handleSearch}
-            onSelect={handleSearch}
-            onClear={handleClearInputField}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col md={1} xs={1}>
+      <div>
+        <Search
+          onSearch={handleSearch}
+          onSelect={handleSearch}
+          onClear={handleClearInputField}
+        />
+      </div>
+      <div>
+        <div className={styles.filterContainer}>
           <Filter onFilterChange={handleFilterChange} modes={selectedModes} />
-        </Col>
-        <Col md={11} xs={11}>
+        </div>
+        <div>
           {loadingStation ? (
             <Spinner animation="border" />
           ) : (
@@ -140,8 +139,8 @@ const App: React.FC = () => {
               onStationClick={handleStationClick}
             />
           )}
-        </Col>
-      </Row>
+        </div>
+      </div>
       {stopsData?.station && selectedStation && (
         <Stops stop={stopsData?.station} />
       )}
