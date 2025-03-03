@@ -5,7 +5,7 @@ import { Stop, StopTimesWithoutPatterns } from '../../types/station';
 import StopTimesList from '../stopTimesList/StopTimesList';
 import RouteList from '../routeList/RouteList';
 
-import styles from './stops.module.css';
+import styles from './Stops.module.css';
 
 const Stops: React.FC<{
   stop: Stop;
