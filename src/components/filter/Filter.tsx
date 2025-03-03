@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
+
 import { Mode } from '../../types/vehicleMode';
 import { modeIcons } from '../../utils/modeIcons';
 
@@ -40,8 +41,8 @@ const Filter: React.FC<{
                   : modeIcons[mode as keyof typeof modeIcons].inactive
               }
               alt={mode}
-              width={50}
-              height={50}
+              width={30}
+              height={30}
               onClick={() => toggleMode(mode as keyof typeof modeIcons)}
               style={{ cursor: 'pointer' }}
             />

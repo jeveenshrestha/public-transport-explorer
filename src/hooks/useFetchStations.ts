@@ -1,8 +1,9 @@
 import { useLazyQuery } from '@apollo/client';
+import { useState } from 'react';
+
+import { GET_STATIONS, GET_STATIONS_BY_LOCATION } from '../graphql/queries';
 import { NearestStation, Station } from '../types/station';
 import { Mode } from '../types/vehicleMode';
-import { useState } from 'react';
-import { GET_STATIONS, GET_STATIONS_BY_LOCATION } from '../graphql/queries';
 
 export const useFetchStations = () => {
   const [stationData, setStationData] = useState<Station[]>([]);

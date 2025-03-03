@@ -2,10 +2,10 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Card, Col, ListGroup, Row } from 'react-bootstrap';
 
 import { Stop, StopTimesWithoutPatterns } from '../../types/station';
+import StopTimesList from '../stopTimesList/StopTimesList';
 import RouteList from '../routeList/RouteList';
 
 import styles from './Stops.module.css';
-import StopTimesList from '../stopTimesList/StopTimesList';
 
 const Stops: React.FC<{
   stop: Stop;

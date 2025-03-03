@@ -1,9 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Stop, StopTimesWithoutPatterns } from '../../types/station';
 
-import styles from './RouteList.module.css';
+import { Stop, StopTimesWithoutPatterns } from '../../types/station';
 import { colors } from '../../utils/modeIcons';
 import { Mode } from '../../types/vehicleMode';
+
+import styles from './RouteList.module.css';
 
 const RouteList: React.FC<{
   onFilterChange: (shortName: string[]) => void;
@@ -46,7 +47,11 @@ const RouteList: React.FC<{
         return (
           <span
             key={shortName}
-            style={{ background: backgroundColor, color: textColor }}
+            style={{
+              background: backgroundColor,
+              color: textColor,
+              cursor: 'pointer',
+            }}
             className={styles.badge}
             onClick={() => toggleRoute(shortName)}
           >

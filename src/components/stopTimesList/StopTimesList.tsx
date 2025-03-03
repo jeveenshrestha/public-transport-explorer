@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react';
-import { StopTimesWithoutPatterns } from '../../types/station';
 import { ListGroup } from 'react-bootstrap';
-import { getTime } from '../../utils/helper';
+
+import { StopTimesWithoutPatterns } from '../../types/station';
+import routeListStyles from '../routeList/RouteList.module.css';
 import { modeIcons } from '../../utils/modeIcons';
+import { getTime } from '../../utils/helper';
 
 import styles from './StopTimesList.module.css';
-import routeListStyles from '../routeList/RouteList.module.css';
 
 const StopTimesList: React.FC<{ patterns: StopTimesWithoutPatterns[] }> = ({
   patterns,

@@ -1,4 +1,5 @@
 import { useLazyQuery } from '@apollo/client';
+
 import { GET_STOPS_IN_STATION } from '../graphql/queries';
 
 export const useFetchStops = () => {

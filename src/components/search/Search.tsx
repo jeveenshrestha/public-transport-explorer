@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Form, InputGroup, ListGroup } from 'react-bootstrap';
-import { modeIcons } from '../utils/modeIcons';
-import { Station } from '../types/station';
-import { useFetchStations } from '../hooks/useFetchStations';
+
+import { useFetchStations } from '../../hooks/useFetchStations';
+import { modeIcons } from '../../utils/modeIcons';
+import { Station } from '../../types/station';
 
 const Search: React.FC<{
   onSearch: (query: string) => void;
