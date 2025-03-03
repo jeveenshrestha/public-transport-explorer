@@ -4,9 +4,9 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { MapProps, modeIcons } from '../../types/map';
 import { Station } from '../../types/station';
 import 'leaflet/dist/leaflet.css';
+import { DEFAULT_CENTER, DEFAULT_ZOOM } from '../../utils/constants';
 
-const DEFAULT_CENTER: [number, number] = [60.1695, 24.9354]; // fallback
-const DEFAULT_ZOOM = 16;
+
 
 // Helper component to recenter the map
 const RecenterMap: React.FC<{ stations: MapProps['stations'] }> = ({

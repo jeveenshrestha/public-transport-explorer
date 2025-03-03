@@ -11,9 +11,9 @@ import { Station } from '../../types/station';
 import { Mode } from '../../types/vehicleMode';
 
 import styles from './Home.module.css';
+import { DEFAULT_LOCATION, DEFAULT_RADIUS } from '../../utils/constants';
 
-const DEFAULT_LOCATION = { lat: 60.1695, lon: 24.9354 }; // Helsinki city center
-const DEFAULT_RADIUS = 500;
+
 
 const Home: React.FC = () => {
   const {
