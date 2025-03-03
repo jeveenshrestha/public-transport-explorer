@@ -5,8 +5,6 @@ import { Stop, StopTimesWithoutPatterns } from '../../types/station';
 import StopTimesList from '../stopTimesList/StopTimesList';
 import RouteList from '../routeList/RouteList';
 
-import styles from './Stops.module.css';
-
 const Stops: React.FC<{
   stop: Stop;
 }> = ({ stop }) => {
@@ -32,7 +30,7 @@ const Stops: React.FC<{
       <Col>
         <Card>
           <Card.Body>
-            <Card.Title className={styles.stops}>
+            <Card.Title>
               <div className="d-flex justify-content-start gap-2">
                 {stop.name}
               </div>
