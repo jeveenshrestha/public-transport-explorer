@@ -1,0 +1,15 @@
+.brand {
+  font-size: 25px;
+  color: white;
+  font-weight: 100;
+  line-height: 0;
+}
+
+.logo {
+  width: 25px;
+  height: 25px;
+}
+
+.nav {
+  background: #007ac9;
+}

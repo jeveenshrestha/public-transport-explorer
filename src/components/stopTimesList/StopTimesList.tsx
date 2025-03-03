@@ -4,7 +4,7 @@ import { ListGroup } from 'react-bootstrap';
 import { StopTimesWithoutPatterns } from '../../types/station';
 import routeListStyles from '../routeList/RouteList.module.css';
 import { modeIcons } from '../../utils/modeIcons';
-import { getTime } from '../../utils/helper';
+import { getExactTime, getTime } from '../../utils/helper';
 
 import styles from './StopTimesList.module.css';
 
@@ -30,7 +30,7 @@ const StopTimesList: React.FC<{ patterns: StopTimesWithoutPatterns[] }> = ({
                 <span className="text-secondary">{pattern.headsign}</span>
               </div>
               <div className="d-flex gap-2">
-                <div>{`Scheduled . ${getTime(
+                <div>{`Scheduled . ${getExactTime(
                   pattern.serviceDay,
                   pattern.scheduledDeparture
                 )}`}</div>
@@ -41,7 +41,7 @@ const StopTimesList: React.FC<{ patterns: StopTimesWithoutPatterns[] }> = ({
                 </div>
               </div>
             </div>
-            <div className="text-dark">
+            <div className="d-flex align-items-center text-dark">
               {getTime(pattern.serviceDay, pattern.scheduledDeparture)}
             </div>
           </div>
