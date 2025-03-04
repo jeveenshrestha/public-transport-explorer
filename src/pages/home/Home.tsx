@@ -11,7 +11,7 @@ import { Station } from '../../types/station';
 import { Mode } from '../../types/vehicleMode';
 
 import styles from './Home.module.css';
-import { DEFAULT_LOCATION, DEFAULT_RADIUS } from '../../utils/constants';
+import { DEFAULT_LOCATION, DEFAULT_RADIUS, POLLINGINTERVAL } from '../../utils/constants';
 
 
 
@@ -48,7 +48,7 @@ const Home: React.FC = () => {
     (stationId: string) => {
       setSelectedStation(stationId);
       fetchStops({ variables: { stationId } });
-      startPolling(2000);
+      startPolling(POLLINGINTERVAL);
     },
     [fetchStops, startPolling]
   );
