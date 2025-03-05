@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Spinner } from 'react-bootstrap';
+import { Alert, Spinner } from 'react-bootstrap';
 
 import { useFetchStations } from '../../hooks/useFetchStations';
 import { useFetchStops } from '../../hooks/useFetchStops';
@@ -11,12 +11,15 @@ import { Station } from '../../types/station';
 import { Mode } from '../../types/vehicleMode';
 
 import styles from './Home.module.css';
-import { DEFAULT_LOCATION, DEFAULT_RADIUS, POLLINGINTERVAL } from '../../utils/constants';
-
-
+import {
+  DEFAULT_LOCATION,
+  DEFAULT_RADIUS,
+  POLLINGINTERVAL,
+} from '../../utils/constants';
 
 const Home: React.FC = () => {
   const {
+    error,
     stationData,
     setStationData,
     selectedModes,
@@ -116,6 +119,11 @@ const Home: React.FC = () => {
 
   return (
     <>
+      {error && (
+        <Alert variant="danger" dismissible>
+          {error.message}
+        </Alert>
+      )}
       <div>
         <Search
           onSearch={handleSearch}

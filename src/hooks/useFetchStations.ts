@@ -9,11 +9,12 @@ export const useFetchStations = () => {
   const [stationData, setStationData] = useState<Station[]>([]);
   const [selectedModes, setSelectedModes] = useState<Mode[]>([]);
   const [loadingStation, setLoadingStation] = useState(false);
+  const [error, setError] = useState<{ message: string } | null>(null);
 
   const [fetchStationsByLocation] = useLazyQuery(GET_STATIONS_BY_LOCATION, {
     fetchPolicy: 'network-only',
     onCompleted: (data) => {
-      if (data?.nearest?.edges) {
+      if (data?.nearest?.edges.length !== 0) {
         const stations =
           data?.nearest?.edges
             .map((edge: NearestStation) => edge.node.place)
@@ -23,6 +24,9 @@ export const useFetchStations = () => {
         ) as Mode[];
         setStationData(stations);
         setSelectedModes(modes);
+        setError(null);
+      } else {
+        setError({ message: 'There are no stations near you!!' });
       }
       setLoadingStation(false);
     },
@@ -31,7 +35,7 @@ export const useFetchStations = () => {
   const [fetchStations] = useLazyQuery(GET_STATIONS, {
     fetchPolicy: 'network-only',
     onCompleted: (data) => {
-      if (data?.stations) {
+      if (data?.stations.length !== 0) {
         const stations =
           data?.stations.filter(
             (station: Station) => station.vehicleMode !== null
@@ -41,12 +45,16 @@ export const useFetchStations = () => {
         ) as Mode[];
         setStationData(stations);
         setSelectedModes(modes);
+        setError(null);
+      } else {
+        setError({ message: 'No such station found!!' });
       }
       setLoadingStation(false);
     },
   });
 
   return {
+    error,
     stationData,
     setStationData,
     selectedModes,
