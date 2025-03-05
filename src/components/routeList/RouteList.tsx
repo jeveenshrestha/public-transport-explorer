@@ -51,11 +51,12 @@ const RouteList: React.FC<{
               background: backgroundColor,
               color: textColor,
               cursor: 'pointer',
+              textWrap: 'nowrap',
             }}
             className={styles.badge}
             onClick={() => toggleRoute(shortName)}
           >
-            {shortName}
+            {shortName ? shortName : '-'}
           </span>
         );
       })}

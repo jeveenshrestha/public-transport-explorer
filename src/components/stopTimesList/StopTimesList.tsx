@@ -24,7 +24,9 @@ const StopTimesList: React.FC<{ patterns: StopTimesWithoutPatterns[] }> = ({
                 />
                 <div className={`${styles.stops} text-secondary`}>
                   <span className={routeListStyles.badge}>
-                    {pattern.trip.route.shortName}
+                    {pattern.trip.route.shortName
+                      ? pattern.trip.route.shortName
+                      : '-'}
                   </span>
                 </div>
                 <span className="text-secondary">{pattern.headsign}</span>
